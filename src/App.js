@@ -50,6 +50,7 @@ const Superman = ({ status }) => {
   switch (status) {
     case 'bored': img = Images.supermanBored; break;
     case 'magic': img = Images.supermanMagic; break;
+    default: img = Images.supermanBored;
   }
   return <SupermanImg src={img} />;
 }
@@ -60,13 +61,14 @@ class Scene extends Component {
   state = {
     mouseX: 0, mouseY: 0, treeAge: 0,
   }
+  _updateXY = (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    this.setState({ mouseX, mouseY });
+  }
   onMouseMove = (e) => {
-    const { nativeEvent } = e;
-    if (nativeEvent) {
-      const mouseX = nativeEvent.offsetX;
-      const mouseY = nativeEvent.offsetY;
-      this.setState({ mouseX, mouseY });
-    }
+    e.persist();
+    this._updateXY(e);
   }
   componentDidMount() {
     this._checkWateringInterval = setInterval(() => {
@@ -93,7 +95,7 @@ class Scene extends Component {
     const treeAge = this.state.treeAge;
     const supermanStatus = this._isWateringTree() ? 'magic' : 'bored';
     return (
-      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)}>
+      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY}>
         <Background />
         {this._shouldWaterComeOut() && <Water x={this.state.mouseX} y={this.state.mouseY} />}
         <Tree age={treeAge} />

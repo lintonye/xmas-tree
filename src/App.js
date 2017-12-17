@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Images from './Images';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import _ from 'lodash';
 
 const TREE_MAX_AGE = 4;
@@ -14,8 +14,6 @@ const Img = styled.img`
 `;
 
 const WaterpotImg = Img.extend`
-  /* left: ${ props => props.x}px;
-  top: ${ props => props.y}px; */
   transform: translate(${ props => props.x}px, ${props => props.y}px) rotate(${({ rotate }) => rotate ? 45 : 0}deg);
 `
 
@@ -32,8 +30,31 @@ const TreeImg = Img.extend`
   left: 300px;
   top: 150px;
 `
+const wanderSlowly = keyframes`
+  0% {
+    transform: translateX(0px);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  50% {
+    transform: translateX(0px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+`;
+
+const ForegroundImg = Img.extend`
+  animation: ${wanderSlowly} 8s ease-in infinite;
+`;
 
 const Background = () => <Img src={Images.background} />
+
+const Foreground = () => <ForegroundImg src={Images.foreground} />
 
 const Waterpot = (props) => {
   const img = Images.waterpot;
@@ -101,6 +122,7 @@ class Scene extends Component {
         <Tree age={treeAge} />
         <Superman status={supermanStatus} />
         <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />
+        <Foreground />
       </SceneDiv>
     );
   }

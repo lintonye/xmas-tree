@@ -1,9 +1,10 @@
 {
   "main.css": "static/css/main.65027555.css",
   "main.css.map": "static/css/main.65027555.css.map",
-  "main.js": "static/js/main.cfbb6b8e.js",
-  "main.js.map": "static/js/main.cfbb6b8e.js.map",
+  "main.js": "static/js/main.e0e58c5a.js",
+  "main.js.map": "static/js/main.e0e58c5a.js.map",
   "static/media/background.png": "static/media/background.68a58f80.png",
+  "static/media/foreground.png": "static/media/foreground.d2e955eb.png",
   "static/media/tree3.png": "static/media/tree3.d30ccdbd.png",
   "static/media/tree4.png": "static/media/tree4.c0be5032.png"
 }

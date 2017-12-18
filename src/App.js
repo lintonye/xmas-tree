@@ -55,15 +55,26 @@ const ForegroundImg = Img.extend`
   animation: ${wanderSlowly} 8s ease-in infinite;
 `;
 
+const GiftDiv = styled.div`
+  cursor: pointer;
+`;
+
 const GiftImg = Img.extend.attrs({
   rotate: props => props.opened ? 360 : 0,
   scale: props => props.opened ? 10 : 1,
-}) `
+})`
   left: ${props => props.x}px;
   top: ${props => props.y}px;
-  cursor: pointer;
   transform: rotate(${props => props.rotate}deg) scale(${props => props.scale});
   transition: transform 1s;
+`;
+
+const GiftText = styled.h2`
+  position: absolute;
+  left: ${props => props.x - 100}px;
+  top: ${props => props.y}px;
+  opacity: ${props => props.visible ? 1 : 0};
+  transition: opacity 1s ease-in-out;
 `;
 
 const Background = () => <Img src={Images.background} />
@@ -107,18 +118,23 @@ class Gift extends Component {
   state = { opened: false }
   _onClick = () => this.setState(prevState => ({ opened: !prevState.opened }));
   render() {
-    return <GiftImg {...this.props} src={Images.gift(this.props.index)} onClick={this._onClick} opened={this.state.opened} />
+    return (
+      <GiftDiv onClick={this._onClick} >
+        <GiftImg {...this.props} src={Images.gift(this.props.index)} opened={this.state.opened} />
+        <GiftText {...this.props} visible={this.state.opened}>{this.props.content}</GiftText>
+      </GiftDiv>
+    );
   }
 }
 
 const Gifts = () => {
-  const xys = [
-    [350, 450],
+  const gifts = [
+    { x: 350, y: 450, content: '$10 Coupon (react101-xmas-10)' },
   ]
   return (
     <div>
       {
-        xys.map((xy, idx) => <Gift index={idx} key={idx} x={xy[0]} y={xy[1]} />)
+        gifts.map((g, idx) => <Gift index={idx} key={idx} x={g.x} y={g.y} content={g.content} />)
       }
     </div>
   );
@@ -126,7 +142,7 @@ const Gifts = () => {
 
 class Scene extends Component {
   state = {
-    mouseX: 0, mouseY: 0, treeAge: 4,
+    mouseX: 0, mouseY: 0, treeAge: 0,
   }
   _updateXY = (e) => {
     const mouseX = e.clientX;

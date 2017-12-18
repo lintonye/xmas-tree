@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Images from './Images';
-import styled, {keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
+import Sound from 'react-sound';
+import Sounds from './Sounds';
 
 const TREE_MAX_AGE = 4;
 
@@ -63,7 +65,12 @@ const Waterpot = (props) => {
 
 const Tree = ({ age }) => {
   const img = Images.tree(age);
-  return <TreeImg src={img} />;
+  return (
+    <div>
+      <TreeImg src={img} />
+      { age > 0 && <Sound url={Sounds.magicGrowth} playStatus={Sound.status.PLAYING} loop={false} />}
+    </div>
+  );
 }
 
 const Superman = ({ status }) => {
@@ -76,7 +83,12 @@ const Superman = ({ status }) => {
   return <SupermanImg src={img} />;
 }
 
-const Water = props => <WaterImg src={Images.water} {...props} />
+const Water = props => (
+  <div>
+    <WaterImg src={Images.water} {...props} />
+    <Sound url={Sounds.flowerWatering} playStatus={Sound.status.PLAYING} loop={true} />
+  </div>
+)
 
 class Scene extends Component {
   state = {
@@ -123,6 +135,7 @@ class Scene extends Component {
         <Superman status={supermanStatus} />
         <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />
         <Foreground />
+        <Sound url={treeAge < TREE_MAX_AGE ? Sounds.background : Sounds.xmas} playStatus={Sound.status.PLAYING} loop={true} />
       </SceneDiv>
     );
   }

@@ -8,7 +8,7 @@ import Sounds from './Sounds';
 const TREE_MAX_AGE = 4;
 
 const SceneDiv = styled.div`
-  cursor: none;
+  cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
 `;
 
 const Img = styled.img`
@@ -68,7 +68,7 @@ const Tree = ({ age }) => {
   return (
     <div>
       <TreeImg src={img} />
-      { age > 0 && <Sound url={Sounds.magicGrowth} playStatus={Sound.status.PLAYING} loop={false} />}
+      {age > 0 && <Sound url={Sounds.magicGrowth} playStatus={Sound.status.PLAYING} loop={false} />}
     </div>
   );
 }
@@ -78,6 +78,7 @@ const Superman = ({ status }) => {
   switch (status) {
     case 'bored': img = Images.supermanBored; break;
     case 'magic': img = Images.supermanMagic; break;
+    case 'celebrate': img = Images.supermanCelebrate; break;
     default: img = Images.supermanBored;
   }
   return <SupermanImg src={img} />;
@@ -125,15 +126,16 @@ class Scene extends Component {
   _shouldWaterComeOut = () => this._in(200, 400, 800, 600);
   _isWateringTree = () => this._in(300, 400, 350, 600);
   render() {
-    const treeAge = this.state.treeAge;
-    const supermanStatus = this._isWateringTree() ? 'magic' : 'bored';
+    const { treeAge } = this.state;
+    const xmasTreeShown = treeAge === TREE_MAX_AGE;
+    const supermanStatus = xmasTreeShown ? 'celebrate' : (this._isWateringTree() ?  'magic' : 'bored');
     return (
-      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY}>
+      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!xmasTreeShown} >
         <Background />
-        {this._shouldWaterComeOut() && <Water x={this.state.mouseX} y={this.state.mouseY} />}
+        {this._shouldWaterComeOut() && !xmasTreeShown && <Water x={this.state.mouseX} y={this.state.mouseY} />}
         <Tree age={treeAge} />
         <Superman status={supermanStatus} />
-        <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />
+        {!xmasTreeShown && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
         <Foreground />
         <Sound url={treeAge < TREE_MAX_AGE ? Sounds.background : Sounds.xmas} playStatus={Sound.status.PLAYING} loop={true} />
       </SceneDiv>

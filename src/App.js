@@ -23,6 +23,7 @@ const SceneDiv = styled.div`
   position: relative; /* Need this to make its children's locations relative to it */
   width: ${SCENE_WIDTH}px;
   height: ${SCENE_HEIGHT}px;
+  background: white;
   overflow: hidden;
 `;
 
@@ -70,12 +71,11 @@ const wanderSlowly = keyframes`
   }
 `;
 
-const BackSceneImg = Img.extend`
+const BackgroundImg = Img.extend`
   transform: translateX(${props => props.offsetX}px);
-  top: 250px;
 `;
 
-const ForegroundImg = BackSceneImg.extend`
+const ForegroundImg = BackgroundImg.extend`
   /* animation: ${wanderSlowly} 8s ease-in infinite; */
   top: 650px;
  `;
@@ -106,9 +106,7 @@ const GiftText = styled.h2`
   transition: opacity 1s ease-in-out;
 `;
 
-const Background = props => <Img src={Images.background} {...props} />
-
-const BackScene = props => <BackSceneImg src={Images.backscene} {...props} />
+const Background = props => <BackgroundImg src={Images.background} {...props} />
 
 const Foreground = props => <ForegroundImg src={Images.foreground} {...props} />
 
@@ -222,8 +220,7 @@ class Scene extends Component {
     const parallax = this._parallax();
     return (
       <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!showXmasTree} >
-        <Background />
-        <BackScene offsetX={parallax.far} />
+        <Background offsetX={parallax.far} />
         <MidSceneDiv offsetX={parallax.mid}>
           <Tree age={treeAge} />
           <Superman status={supermanStatus} />

@@ -6,6 +6,8 @@ import Sound from 'react-sound';
 import Sounds from './Sounds';
 
 const TREE_MAX_AGE = 4;
+const SCENE_WIDTH = 1024;
+const SCENE_HEIGHT = 768;
 
 const AppDiv = styled.div`
   width: 100vw;
@@ -17,10 +19,11 @@ const AppDiv = styled.div`
 `
 
 const SceneDiv = styled.div`
-  cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
+  /* cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'}; */
   position: relative; /* Need this to make its children's locations relative to it */
-  width: 1024px;
-  height: 768px;
+  width: ${SCENE_WIDTH}px;
+  height: ${SCENE_HEIGHT}px;
+  overflow: hidden;
 `;
 
 const Img = styled.img`
@@ -62,9 +65,19 @@ const wanderSlowly = keyframes`
   }
 `;
 
-const ForegroundImg = Img.extend`
-  animation: ${wanderSlowly} 8s ease-in infinite;
+const BackSceneImg = Img.extend`
+  transform: translateX(${props => props.offsetX}px);
+  top: 250px;
+`;
+
+const ForegroundImg = BackSceneImg.extend`
+  /* animation: ${wanderSlowly} 8s ease-in infinite; */
+  top: 650px;
  `;
+
+const MainSceneDiv = styled.div`
+  transform: translateX(${props => props.offsetX}px);
+`;
 
 const GiftDiv = styled.div`
   cursor: pointer;
@@ -88,9 +101,11 @@ const GiftText = styled.h2`
   transition: opacity 1s ease-in-out;
 `;
 
-const Background = () => <Img src={Images.background} />
+const Background = props => <Img src={Images.background} {...props} />
 
-const Foreground = () => <ForegroundImg src={Images.foreground} />
+const BackScene = props => <BackSceneImg src={Images.backscene} {...props} />
+
+const Foreground = props => <ForegroundImg src={Images.foreground} {...props} />
 
 const Waterpot = (props) => {
   const img = Images.waterpot;
@@ -191,15 +206,19 @@ class Scene extends Component {
     const { treeAge } = this.state;
     const xmasTreeShown = treeAge === TREE_MAX_AGE;
     const supermanStatus = xmasTreeShown ? 'celebrate' : (this._isWateringTree() ? 'magic' : 'bored');
+    const parallax = (SCENE_WIDTH/2 - this.state.mouseX) / 8;
     return (
       <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!xmasTreeShown} >
         <Background />
-        {this._shouldWaterComeOut() && !xmasTreeShown && <Water x={this.state.mouseX} y={this.state.mouseY} />}
-        <Tree age={treeAge} />
-        <Superman status={supermanStatus} />
-        {!xmasTreeShown && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
-        <Foreground />
-        {xmasTreeShown && <Gifts />}
+        <BackScene offsetX={parallax / 4}/>
+        <MainSceneDiv offsetX={parallax}>
+          {this._shouldWaterComeOut() && !xmasTreeShown && <Water x={this.state.mouseX} y={this.state.mouseY} />}
+          <Tree age={treeAge} />
+          <Superman status={supermanStatus} />
+          {!xmasTreeShown && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
+          {xmasTreeShown && <Gifts />}
+        </MainSceneDiv>
+        <Foreground offsetX={parallax * 2}/>
         <Sound url={xmasTreeShown ? Sounds.xmas : Sounds.background} playStatus={Sound.status.PLAYING} loop={true} />
       </SceneDiv>
     );

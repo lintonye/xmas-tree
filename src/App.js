@@ -204,22 +204,22 @@ class Scene extends Component {
   _isWateringTree = () => this._in(300, 400, 350, 600);
   render() {
     const { treeAge } = this.state;
-    const xmasTreeShown = treeAge === TREE_MAX_AGE;
-    const supermanStatus = xmasTreeShown ? 'celebrate' : (this._isWateringTree() ? 'magic' : 'bored');
+    const showXmasTree = treeAge === TREE_MAX_AGE;
+    const supermanStatus = showXmasTree ? 'celebrate' : (this._isWateringTree() ? 'magic' : 'bored');
     const parallax = (SCENE_WIDTH/2 - this.state.mouseX) / 8;
     return (
-      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!xmasTreeShown} >
+      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!showXmasTree} >
         <Background />
         <BackScene offsetX={parallax / 4}/>
         <MainSceneDiv offsetX={parallax}>
-          {this._shouldWaterComeOut() && !xmasTreeShown && <Water x={this.state.mouseX} y={this.state.mouseY} />}
+          {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
           <Tree age={treeAge} />
           <Superman status={supermanStatus} />
-          {!xmasTreeShown && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
-          {xmasTreeShown && <Gifts />}
+          {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
+          {showXmasTree && <Gifts />}
         </MainSceneDiv>
         <Foreground offsetX={parallax * 2}/>
-        <Sound url={xmasTreeShown ? Sounds.xmas : Sounds.background} playStatus={Sound.status.PLAYING} loop={true} />
+        <Sound url={showXmasTree ? Sounds.xmas : Sounds.background} playStatus={Sound.status.PLAYING} loop={true} />
       </SceneDiv>
     );
   }

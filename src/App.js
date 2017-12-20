@@ -115,14 +115,21 @@ const Waterpot = (props) => {
   return <WaterpotImg src={img} {...props} />;
 };
 
-const Tree = ({ age }) => {
-  const img = Images.tree(age);
-  return (
-    <div>
-      <TreeImg src={img} />
-      {age > 0 && <Sound url={Sounds.magicGrowth} playStatus={Sound.status.PLAYING} loop={false} />}
-    </div>
-  );
+class Tree extends Component {
+  state = { growing: false }
+  componentWillReceiveProps(nextProps) {
+    const growing = this.props.age < nextProps.age;
+    this.setState({ growing });
+  }
+  render() {
+    const img = Images.tree(this.props.age);
+    return (
+      <div>
+        <TreeImg src={img} />
+        {this.state.growing && <Sound url={Sounds.magicGrowth} playStatus={Sound.status.PLAYING} loop={false} />}
+      </div>
+    );
+  }
 }
 
 const Superman = ({ status }) => {

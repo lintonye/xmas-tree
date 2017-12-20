@@ -19,7 +19,7 @@ const AppDiv = styled.div`
 `
 
 const SceneDiv = styled.div`
-  /* cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'}; */
+  cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
   position: relative; /* Need this to make its children's locations relative to it */
   width: ${SCENE_WIDTH}px;
   height: ${SCENE_HEIGHT}px;
@@ -27,6 +27,8 @@ const SceneDiv = styled.div`
 `;
 
 const Img = styled.img`
+  /* Needed to prevent images from hijacking mouse events from its parent div */
+  pointer-events: none; 
   position: absolute;
 `;
 
@@ -78,7 +80,7 @@ const ForegroundImg = BackSceneImg.extend`
   top: 650px;
  `;
 
-const MainSceneDiv = styled.div`
+const MidSceneDiv = styled.div`
   transform: translateX(${props => props.offsetX}px);
 `;
 
@@ -178,10 +180,10 @@ class Scene extends Component {
     // mouseX and Y are relative to the SceneDiv
     const mouseX = e.clientX - bounds.left;
     const mouseY = e.clientY - bounds.top;
+    // console.log('mx', mouseX, 'my', mouseY, 'cx', e.clientX, 'cy', e.clientY, 'bounds', bounds)
     this.setState({ mouseX, mouseY });
   }
   onMouseMove = (e) => {
-    e.persist();
     this._updateXY(e);
   }
   componentDidMount() {
@@ -199,29 +201,37 @@ class Scene extends Component {
     clearInterval(this._checkWateringInterval);
   }
   _in = (x1, y1, x2, y2) => {
-    const x = this.state.mouseX;
+    const x = this.state.mouseX - this._parallax().mid;
     const y = this.state.mouseY;
     return x >= x1 && x <= x2 && y >= y1 && y <= y2;
   }
   _shouldWaterComeOut = () => this._in(200, 400, 800, 600);
   _isWateringTree = () => this._in(300, 400, 350, 600);
+  _parallax = () => {
+    const p = (SCENE_WIDTH / 2 - this.state.mouseX) / 16;
+    return {
+      far: p / 4,
+      mid: p,
+      near: p * 8,
+    }
+  }
   render() {
     const { treeAge } = this.state;
     const showXmasTree = treeAge === TREE_MAX_AGE;
     const supermanStatus = showXmasTree ? 'celebrate' : (this._isWateringTree() ? 'magic' : 'bored');
-    const parallax = (SCENE_WIDTH/2 - this.state.mouseX) / 8;
+    const parallax = this._parallax();
     return (
       <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!showXmasTree} >
         <Background />
-        <BackScene offsetX={parallax / 4}/>
-        <MainSceneDiv offsetX={parallax}>
-          {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
+        <BackScene offsetX={parallax.far} />
+        <MidSceneDiv offsetX={parallax.mid}>
           <Tree age={treeAge} />
           <Superman status={supermanStatus} />
-          {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
           {showXmasTree && <Gifts />}
-        </MainSceneDiv>
-        <Foreground offsetX={parallax * 2}/>
+        </MidSceneDiv>
+        {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
+        {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
+        <Foreground offsetX={parallax.near} />
         <Sound url={showXmasTree ? Sounds.xmas : Sounds.background} playStatus={Sound.status.PLAYING} loop={true} />
       </SceneDiv>
     );

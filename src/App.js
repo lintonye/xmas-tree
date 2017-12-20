@@ -31,7 +31,10 @@ const Img = styled.img`
 `;
 
 const WaterpotImg = Img.extend`
-  transform: translate(${ props => props.x}px, ${props => props.y}px) rotate(${({ rotate }) => rotate ? 45 : 0}deg);
+  left: ${props => props.x}px;
+  top: ${props => props.y}px;
+  transform: rotate(${({ rotate }) => rotate ? 45 : 0}deg);
+  transition: transform 0.3s;
 `
 
 const WaterImg = Img.extend`

@@ -6,10 +6,21 @@ import Sound from 'react-sound';
 import Sounds from './Sounds';
 
 const TREE_MAX_AGE = 4;
-const GIFT_COUNT = 1;
+
+const AppDiv = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: #e2f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const SceneDiv = styled.div`
   cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
+  position: relative; /* Need this to make its children's locations relative to it */
+  width: 1024px;
+  height: 768px;
 `;
 
 const Img = styled.img`
@@ -53,7 +64,7 @@ const wanderSlowly = keyframes`
 
 const ForegroundImg = Img.extend`
   animation: ${wanderSlowly} 8s ease-in infinite;
-`;
+ `;
 
 const GiftDiv = styled.div`
   cursor: pointer;
@@ -62,7 +73,7 @@ const GiftDiv = styled.div`
 const GiftImg = Img.extend.attrs({
   rotate: props => props.opened ? 360 : 0,
   scale: props => props.opened ? 10 : 1,
-})`
+}) `
   left: ${props => props.x}px;
   top: ${props => props.y}px;
   transform: rotate(${props => props.rotate}deg) scale(${props => props.scale});
@@ -145,8 +156,10 @@ class Scene extends Component {
     mouseX: 0, mouseY: 0, treeAge: 0,
   }
   _updateXY = (e) => {
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
+    const bounds = e.target.getBoundingClientRect()
+    // mouseX and Y are relative to the SceneDiv
+    const mouseX = e.clientX - bounds.left;
+    const mouseY = e.clientY - bounds.top;
     this.setState({ mouseX, mouseY });
   }
   onMouseMove = (e) => {
@@ -196,7 +209,9 @@ class Scene extends Component {
 class App extends Component {
   render() {
     return (
-      <Scene />
+      <AppDiv>
+        <Scene />
+      </AppDiv>
     );
   }
 }

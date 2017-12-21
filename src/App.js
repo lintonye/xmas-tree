@@ -8,6 +8,11 @@ import Sounds from './Sounds';
 const TREE_MAX_AGE = 4;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
+const VIEWPORT_WIDTH = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+const VIEWPORT_HEIGHT = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+const SCALE = Math.min(1, VIEWPORT_WIDTH / SCENE_WIDTH, VIEWPORT_HEIGHT / SCENE_HEIGHT);
+
+const scaled = p => p * SCALE;
 
 const AppDiv = styled.div`
   width: 100vw;
@@ -19,10 +24,10 @@ const AppDiv = styled.div`
 `
 
 const SceneDiv = styled.div`
-  cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
+  /* cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'}; */
   position: relative; /* Need this to make its children's locations relative to it */
-  width: ${SCENE_WIDTH}px;
-  height: ${SCENE_HEIGHT}px;
+  width: ${SCENE_WIDTH * SCALE}px;
+  height: ${SCENE_HEIGHT * SCALE}px;
   background: white;
   overflow: hidden;
 `;
@@ -31,54 +36,38 @@ const Img = styled.img`
   /* Needed to prevent images from hijacking mouse events from its parent div */
   pointer-events: none; 
   position: absolute;
+  transform: scale(${SCALE});
+  transform-origin: top left;
 `;
 
 const WaterpotImg = Img.extend`
   left: ${props => props.x}px;
   top: ${props => props.y}px;
-  transform: rotate(${({ rotate }) => rotate ? 45 : 0}deg);
+  transform: rotate(${({ rotate }) => rotate ? 45 : 0}deg) scale(${SCALE});
   transition: transform 0.3s;
 `
 
 const WaterImg = Img.extend`
-  transform: translate(${ props => props.x + 80}px, ${props => props.y + 20}px);
+  transform: translate(${ props => props.x + scaled(60)}px, ${props => props.y + scaled(40)}px) scale(${SCALE});
 `
 
 const SupermanImg = Img.extend`
-  left: 150px;
-  top: 500px;
+  left: ${scaled(150)}px;
+  top: ${scaled(500)}px;
 `
 
 const TreeImg = Img.extend`
-  left: 300px;
-  top: 150px;
+  left: ${scaled(300)}px;
+  top: ${scaled(150)}px;
 `
-const wanderSlowly = keyframes`
-  0% {
-    transform: translateX(0px);
-  }
-  25% {
-    transform: translateX(-10px);
-  }
-  50% {
-    transform: translateX(0px);
-  }
-  75% {
-    transform: translateX(10px);
-  }
-  100% {
-    transform: translateX(0px);
-  }
-`;
 
 const BackgroundImg = Img.extend`
-  transform: translateX(${props => props.offsetX}px);
+  transform: translateX(${props => props.offsetX}px) scale(${SCALE});
   transition: transform 500ms ease-in-out;
 `;
 
 const ForegroundImg = BackgroundImg.extend`
-  /* animation: ${wanderSlowly} 8s ease-in infinite; */
-  top: 650px;
+  top: ${scaled(650)}px;
  `;
 
 const MidSceneDiv = styled.div`
@@ -94,16 +83,16 @@ const GiftImg = Img.extend.attrs({
   rotate: props => props.opened ? 360 : 0,
   scale: props => props.opened ? 10 : 1,
 }) `
-  left: ${props => props.x}px;
-  top: ${props => props.y}px;
-  transform: rotate(${props => props.rotate}deg) scale(${props => props.scale});
+  left: ${props => scaled(props.x)}px;
+  top: ${props => scaled(props.y)}px;
+  transform: rotate(${props => props.rotate}deg) scale(${props => scaled(props.scale)});
   transition: transform 1s;
 `;
 
 const GiftText = styled.h2`
   position: absolute;
-  left: ${props => props.x - 100}px;
-  top: ${props => props.y}px;
+  left: ${props => scaled(props.x - 100)}px;
+  top: ${props => scaled(props.y)}px;
   opacity: ${props => props.visible ? 1 : 0};
   transition: opacity 1s ease-in-out;
 `;
@@ -210,12 +199,12 @@ class Scene extends Component {
   _in = (x1, y1, x2, y2) => {
     const x = this.state.mouseX - this._parallax().mid;
     const y = this.state.mouseY;
-    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+    return x >= scaled(x1) && x <= scaled(x2) && y >= scaled(y1) && y <= scaled(y2);
   }
   _shouldWaterComeOut = () => this._in(200, 400, 800, 600);
-  _isWateringTree = () => this._in(300, 400, 350, 600);
+  _isWateringTree = () => this._in(330, 400, 370, 600);
   _parallax = () => {
-    const p = (SCENE_WIDTH / 2 - this.state.mouseX) / 16;
+    const p = (SCENE_WIDTH * SCALE / 2 - this.state.mouseX) / 16;
     return {
       far: p / 4,
       mid: p,

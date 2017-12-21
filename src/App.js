@@ -8,23 +8,28 @@ import Sounds from './Sounds';
 const TREE_MAX_AGE = 4;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
+const VIEWPORT_WIDTH = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+const VIEWPORT_HEIGHT = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+const SCALE = Math.min(1, VIEWPORT_WIDTH / SCENE_WIDTH, VIEWPORT_HEIGHT / SCENE_HEIGHT);
 
 const AppDiv = styled.div`
   width: 100vw;
   height: 100vh;
   background: #e2f8f8;
   display: flex;
-  justify-content: center;
+  justify-content: center; 
   align-items: center;
 `
 
 const SceneDiv = styled.div`
-  cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
+  /* cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'}; */
   position: relative; /* Need this to make its children's locations relative to it */
   width: ${SCENE_WIDTH}px;
   height: ${SCENE_HEIGHT}px;
   background: white;
   overflow: hidden;
+  transform: scale(${SCALE});
+  flex-shrink: 0; /* Prevent the parent flexbox from cutting off the scene when scaled */
 `;
 
 const Img = styled.img`
@@ -185,8 +190,8 @@ class Scene extends Component {
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()
     // mouseX and Y are relative to the SceneDiv
-    const mouseX = e.clientX - bounds.left;
-    const mouseY = e.clientY - bounds.top;
+    const mouseX = (e.clientX - bounds.left) / SCALE;
+    const mouseY = (e.clientY - bounds.top) / SCALE;
     // console.log('mx', mouseX, 'my', mouseY, 'cx', e.clientX, 'cy', e.clientY, 'bounds', bounds)
     this.setState({ mouseX, mouseY });
   }

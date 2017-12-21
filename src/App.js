@@ -73,6 +73,7 @@ const wanderSlowly = keyframes`
 
 const BackgroundImg = Img.extend`
   transform: translateX(${props => props.offsetX}px);
+  transition: transform 500ms ease-in-out;
 `;
 
 const ForegroundImg = BackgroundImg.extend`
@@ -82,6 +83,7 @@ const ForegroundImg = BackgroundImg.extend`
 
 const MidSceneDiv = styled.div`
   transform: translateX(${props => props.offsetX}px);
+  transition: transform 500ms ease-in-out;
 `;
 
 const GiftDiv = styled.div`

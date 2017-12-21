@@ -27,6 +27,7 @@ const SceneDiv = styled.div`
   overflow: hidden;
   transform: scale(${props => props.scale});
   flex-shrink: 0; /* Prevent the parent flexbox from cutting off the scene when scaled */
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove Gray Highlight When Tapping Links in Mobile Safari */
 `;
 
 const Img = styled.img`
@@ -221,7 +222,7 @@ class Scene extends Component {
     return x >= x1 && x <= x2 && y >= y1 && y <= y2;
   }
   _shouldWaterComeOut = () => this._in(200, 500, 800, 700);
-  _isWateringTree = () => this._in(320, 400, 380, 600);
+  _isWateringTree = () => this._in(320, 500, 380, 600);
   _parallax = () => {
     const p = (SCENE_WIDTH / 2 - this.state.mouseX) / 16;
     return {
@@ -236,7 +237,7 @@ class Scene extends Component {
     const supermanStatus = showXmasTree ? 'celebrate' : (this._isWateringTree() ? 'magic' : 'bored');
     const parallax = this._parallax();
     return (
-      <SceneDiv scale={this.props.scale} onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!showXmasTree} >
+      <SceneDiv scale={this.props.scale} onMouseMove={_.throttle(this.onMouseMove, 200)} onClick={this._updateXY} hideCursor={!showXmasTree} >
         <Background offsetX={parallax.far} />
         <MidSceneDiv offsetX={parallax.mid}>
           <MidgroundImg src={Images.midground} />

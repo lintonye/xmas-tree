@@ -8,9 +8,6 @@ import Sounds from './Sounds';
 const TREE_MAX_AGE = 4;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
-const VIEWPORT_WIDTH = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-const VIEWPORT_HEIGHT = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-const SCALE = Math.min(1, VIEWPORT_WIDTH / SCENE_WIDTH, VIEWPORT_HEIGHT / SCENE_HEIGHT);
 
 const AppDiv = styled.div`
   width: 100vw;
@@ -22,13 +19,13 @@ const AppDiv = styled.div`
 `
 
 const SceneDiv = styled.div`
-  /* cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'}; */
+  cursor: ${ ({ hideCursor }) => hideCursor ? 'none' : 'default'};
   position: relative; /* Need this to make its children's locations relative to it */
   width: ${SCENE_WIDTH}px;
   height: ${SCENE_HEIGHT}px;
   background: white;
   overflow: hidden;
-  transform: scale(${SCALE});
+  transform: scale(${props => props.scale});
   flex-shrink: 0; /* Prevent the parent flexbox from cutting off the scene when scaled */
 `;
 
@@ -190,8 +187,8 @@ class Scene extends Component {
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()
     // mouseX and Y are relative to the SceneDiv
-    const mouseX = (e.clientX - bounds.left) / SCALE;
-    const mouseY = (e.clientY - bounds.top) / SCALE;
+    const mouseX = (e.clientX - bounds.left) / this.props.scale;
+    const mouseY = (e.clientY - bounds.top) / this.props.scale;
     // console.log('mx', mouseX, 'my', mouseY, 'cx', e.clientX, 'cy', e.clientY, 'bounds', bounds)
     this.setState({ mouseX, mouseY });
   }
@@ -233,7 +230,7 @@ class Scene extends Component {
     const supermanStatus = showXmasTree ? 'celebrate' : (this._isWateringTree() ? 'magic' : 'bored');
     const parallax = this._parallax();
     return (
-      <SceneDiv onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!showXmasTree} >
+      <SceneDiv scale={this.props.scale} onMouseMove={_.throttle(this.onMouseMove, 500)} onClick={this._updateXY} hideCursor={!showXmasTree} >
         <Background offsetX={parallax.far} />
         <MidSceneDiv offsetX={parallax.mid}>
           <Tree age={treeAge} />
@@ -250,10 +247,20 @@ class Scene extends Component {
 }
 
 class App extends Component {
+  _update = () => this.forceUpdate();
+  componentDidMount() {
+    window.addEventListener("resize", this._update);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this._update);
+  }
   render() {
+    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    const scale = Math.min(1, viewportWidth / SCENE_WIDTH, viewportHeight / SCENE_HEIGHT);
     return (
       <AppDiv>
-        <Scene />
+        <Scene scale={scale} />
       </AppDiv>
     );
   }

@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Sounds from './Sounds';
 import Sound from './Sound';
 
-const TREE_MAX_AGE = 8;
+const TREE_MAX_AGE = 4;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
 
@@ -127,18 +127,17 @@ const Waterpot = (props) => {
 };
 
 class Tree extends Component {
-  state = { fromAge: 0, toAge: 0 }
+  state = { growing: false }
   componentWillReceiveProps(nextProps) {
-    this.setState({ fromAge: this.props.age, toAge: nextProps.age });
+    const growing = this.props.age < nextProps.age;
+    this.setState({ growing });
   }
   render() {
-    const { fromAge, toAge } = this.state;
-    const img = Images.tree(fromAge, toAge);
-    const growing = fromAge < toAge;
+    const img = Images.tree(this.props.age);
     return (
       <div>
         <TreeImg src={img} />
-        {growing && <Sound url={Sounds.magicGrowth} loop={false} />}
+        {this.state.growing && <Sound url={Sounds.magicGrowth} loop={false} />}
       </div>
     );
   }

@@ -17,9 +17,6 @@ export default {
   supermanMagic,
   supermanCelebrate,
   water,
-  tree: (fromAge, toAge) => {
-    const fn = fromAge === toAge ? `tree${fromAge}` : `tree${fromAge}to${toAge}`;
-    return require(`./images/${fn}.gif`);
-  },
+  tree: age => require(`./images/tree${age}.png`),
   gift: idx => require(`./images/gift${idx}.gif`),
 }

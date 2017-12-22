@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Images from './Images';
 import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
-import Sound from 'react-sound';
 import Sounds from './Sounds';
+import Sound from './Sound';
 
 const TREE_MAX_AGE = 4;
 const SCENE_WIDTH = 1024;
@@ -137,7 +137,7 @@ class Tree extends Component {
     return (
       <div>
         <TreeImg src={img} />
-        {this.state.growing && <Sound url={Sounds.magicGrowth} playStatus={Sound.status.PLAYING} loop={false} />}
+        {this.state.growing && <Sound url={Sounds.magicGrowth} loop={false} />}
       </div>
     );
   }
@@ -157,7 +157,7 @@ const Superman = ({ status }) => {
 const Water = props => (
   <div>
     <WaterImg src={Images.water} {...props} />
-    <Sound url={Sounds.flowerWatering} playStatus={Sound.status.PLAYING} loop={true} />
+    <Sound url={Sounds.flowerWatering} loop={true} />
   </div>
 )
 
@@ -228,7 +228,7 @@ class Scene extends Component {
     return {
       far: p / 4,
       mid: p,
-      near: p * 8,
+      near: p * 4,
     }
   }
   render() {
@@ -248,7 +248,7 @@ class Scene extends Component {
         {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
         {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
         <Foreground offsetX={parallax.near} />
-        <Sound url={showXmasTree ? Sounds.xmas : Sounds.background} playStatus={Sound.status.PLAYING} loop={true} />
+        <Sound url={showXmasTree ? Sounds.xmas : Sounds.background} loop={true} />
       </SceneDiv>
     );
   }

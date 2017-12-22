@@ -17,6 +17,6 @@ export default {
   supermanMagic,
   supermanCelebrate,
   water,
-  tree: age => require(`./images/tree${age}.png`),
+  tree: age => require(`./images/tree${age}.gif`),
   gift: idx => require(`./images/gift${idx}.gif`),
 }

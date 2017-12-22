@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Sounds from './Sounds';
 import Sound from './Sound';
 
-const TREE_MAX_AGE = 4;
+const TREE_MAX_AGE = 8;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
 

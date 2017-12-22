@@ -1,9 +1,9 @@
 {
   "main.css": "static/css/main.65027555.css",
   "main.css.map": "static/css/main.65027555.css.map",
-  "main.js": "static/js/main.989b6d39.js",
-  "main.js.map": "static/js/main.989b6d39.js.map",
-  "static/media/background.mp3": "static/media/background.cea7c88c.mp3",
+  "main.js": "static/js/main.3233b303.js",
+  "main.js.map": "static/js/main.3233b303.js.map",
+  "static/media/background.mp3": "static/media/background.38b79f0b.mp3",
   "static/media/background.png": "static/media/background.e9a6a9e5.png",
   "static/media/flowerWatering.mp3": "static/media/flowerWatering.88eff4a5.mp3",
   "static/media/foreground.png": "static/media/foreground.5b84e894.png",
@@ -11,8 +11,8 @@
   "static/media/midground.png": "static/media/midground.58ce1d20.png",
   "static/media/supermanBored.gif": "static/media/supermanBored.ee9ef40e.gif",
   "static/media/supermanCelebrate.gif": "static/media/supermanCelebrate.91e5ff50.gif",
-  "static/media/supermanMagic.gif": "static/media/supermanMagic.2df99083.gif",
+  "static/media/supermanMagic.gif": "static/media/supermanMagic.4c33bb84.gif",
   "static/media/tree3.png": "static/media/tree3.d30ccdbd.png",
   "static/media/tree4.png": "static/media/tree4.f069793e.png",
-  "static/media/xmas.mp3": "static/media/xmas.b1f327cc.mp3"
+  "static/media/xmas.mp3": "static/media/xmas.9c957927.mp3"
 }

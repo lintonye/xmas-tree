@@ -99,23 +99,12 @@ const GiftDiv = styled.div`
   cursor: pointer;
 `;
 
-const GiftImg = Img.extend.attrs({
-  rotate: props => props.opened ? 360 : 0,
-  scale: props => props.opened ? 10 : 1,
-}) `
-  left: ${props => props.x}px;
-  top: ${props => props.y}px;
-  transform: rotate(${props => props.rotate}deg) scale(${props => props.scale});
-  transition: transform 1s;
-`;
-
-const GiftText = styled.h2`
-  position: absolute;
-  left: ${props => props.x - 100}px;
-  top: ${props => props.y}px;
-  opacity: ${props => props.visible ? 1 : 0};
-  transition: opacity 1s ease-in-out;
-`;
+const GiftImg = Img.extend`
+  left: 350px;
+  top: 450px;
+  cursor: pointer;
+  pointer-events: auto;
+`
 
 const Background = props => <BackgroundImg src={Images.background} {...props} />
 
@@ -161,30 +150,126 @@ const Water = props => (
   </div>
 )
 
+const CouponDiv = styled.div`
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  div#coupon {
+    background-image: url("${Images.couponBg}");
+    background-repeat: no-repeat;
+    padding: 20px;
+    width: 460px;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #283593;
+    #title-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      line-height: 0.3em;
+      h2 {
+        margin-top: 30px;
+      }
+      span {
+        font-size: 1.2em;
+      }
+    }
+    #discount {
+      text-align: center;
+      font-size: 3em;
+      color: red;
+    }
+    #code-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: right;
+      #labels {
+        margin-right: 10px;
+        h1 {
+          line-height: 0;
+          font-size: 2em;
+          font-weight: 100;
+        }
+        span {
+          line-height: 0;
+          color: #a0a0a0;
+        }
+      }
+      #code {
+        border-style: dotted;
+        border-width: 2px;
+        border-radius: 8px;
+        padding: 5px;
+        line-height: 0;
+      }
+    }
+    #links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      a {
+        margin: 5px;
+        color: #0097A7;
+      }
+      i {
+        font-size: 1.2em;
+      }
+    }
+  }
+`;
+
+const SocialIcon = ({ name, link }) => (
+  <a href={link}>
+    <i class={`fa fa-${name}`} aria-hidden="true"></i>
+  </a>
+)
+
+const Coupon = () => (
+  <CouponDiv>
+    <div id="coupon">
+      <div id="title-container">
+        <h2>React 101 For Designers</h2>
+        <span>Enroll January 2018!</span>
+      </div>
+      <div id="discount">$20</div>
+      <div id="code-container">
+        <div id="labels">
+          <h1>Coupon Code</h1>
+          <span>Valid until January 31, 2018</span>
+        </div>
+        <div id="code">
+          <h2>R4D2018</h2>
+        </div>
+      </div>
+      <div id="links">
+        <a href="http://learnreact.design">learnreact.design</a>
+        <div>
+          <SocialIcon name='twitter' link="https://twitter.com/home?status=Happy%20holidays!%20Let's%20grow%20a%20Xmas%20tree%3A%20https%3A//lintonye.github.io/xmas-tree/%20" />
+          <SocialIcon name='facebook' link='https://www.facebook.com/sharer/sharer.php?u=https%3A//lintonye.github.io/xmas-tree/' />
+          <SocialIcon name='google-plus' link='https://plus.google.com/share?url=https%3A//lintonye.github.io/xmas-tree/' />
+        </div>
+      </div>
+    </div>
+  </CouponDiv>
+)
+
 class Gift extends Component {
   state = { opened: false }
   _onClick = () => this.setState(prevState => ({ opened: !prevState.opened }));
   render() {
+    const img = this.state.opened ? Images.giftUnwrapping : Images.gift;
     return (
-      <GiftDiv onClick={this._onClick} >
-        <GiftImg {...this.props} src={Images.gift(this.props.index)} opened={this.state.opened} />
-        <GiftText {...this.props} visible={this.state.opened}>{this.props.content}</GiftText>
-      </GiftDiv>
+      <GiftImg onClick={this._onClick} src={img} />
     );
   }
-}
-
-const Gifts = () => {
-  const gifts = [
-    { x: 350, y: 450, content: '$10 Coupon (react101-xmas-10)' },
-  ]
-  return (
-    <div>
-      {
-        gifts.map((g, idx) => <Gift index={idx} key={idx} x={g.x} y={g.y} content={g.content} />)
-      }
-    </div>
-  );
 }
 
 class Scene extends Component {
@@ -243,12 +328,13 @@ class Scene extends Component {
           <MidgroundImg src={Images.midground} />
           <Tree age={treeAge} />
           <Superman status={supermanStatus} />
-          {showXmasTree && <Gifts />}
+          {showXmasTree && <Gift />}
         </MidSceneDiv>
         {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
         {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
         <Foreground offsetX={parallax.near} />
         <Sound url={showXmasTree ? Sounds.xmas : Sounds.background} loop={true} />
+        <Coupon />
       </SceneDiv>
     );
   }

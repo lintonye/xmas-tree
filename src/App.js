@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Sounds from './Sounds';
 import Sound from './Sound';
 
-const TREE_MAX_AGE = 8;
+const TREE_MAX_AGE = 9;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
 
@@ -189,7 +189,7 @@ const Gifts = () => {
 
 class Scene extends Component {
   state = {
-    mouseX: 0, mouseY: 0, treeAge: 0,
+    mouseX: 0, mouseY: 0, treeAge: TREE_MAX_AGE,
   }
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()

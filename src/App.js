@@ -312,7 +312,7 @@ const Gift = ({ onClick, isOpen }) => <GiftImg onClick={onClick} src={isOpen ? I
 
 class Scene extends Component {
   state = {
-    mouseX: 0, mouseY: 0, treeAge: TREE_MAX_AGE, giftOpen: false
+    mouseX: 0, mouseY: 0, treeAge: 0, giftOpen: false
   }
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()

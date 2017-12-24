@@ -285,7 +285,7 @@ class AnimatedCoupon extends Component {
       .to(this.couponContainer, 0.5, { background: 'rgba(0, 0, 0, 0.6)' })
       .to(this.boxLid, 1, { x: 20, y: -100, scale: 4, ease: Power3.easeInOut }, '-=0.5')
       .to(this.boxBody, 1, { x: 20, y: 50, scale: 4, ease: Power3.easeInOut }, '-=1')
-      .to(this.boxLid, 1, { y: -700, ease: Power3.easeInOut }, '-=0.5')
+      .to(this.boxLid, 0.5, { y: -700, ease: Power3.easeIn }, '-=0.5')
       .from(this.coupon, 0.4, { y: 200, opacity: 0, ease: Power3.easeInOut })
       .to(this.coupon, 1, { scale: 1, ease: Bounce.easeOut })
   }
@@ -312,7 +312,7 @@ const Gift = ({ onClick, isOpen }) => <GiftImg onClick={onClick} src={isOpen ? I
 
 class Scene extends Component {
   state = {
-    mouseX: 0, mouseY: 0, treeAge: 0, giftOpen: false
+    mouseX: 0, mouseY: 0, treeAge: TREE_MAX_AGE, giftOpen: false
   }
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()

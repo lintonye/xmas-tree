@@ -143,7 +143,7 @@ const CouponDiv = styled.div`
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      line-height: 0.3em;
+      line-height: 0.4em;
       h2 {
         margin-top: 30px;
       }
@@ -186,11 +186,11 @@ const CouponDiv = styled.div`
       justify-content: space-between;
       align-items: center;
       a {
-        margin: 5px;
+        margin: 10px;
         color: #0097A7;
       }
       i {
-        font-size: 1.2em;
+        font-size: 1.5em;
       }
     }
   }
@@ -283,11 +283,11 @@ class AnimatedCoupon extends Component {
       .to(this.boxLid, 0.1, { opacity: 1 })
       .to(this.boxBody, 0.1, { opacity: 1 })
       .to(this.couponContainer, 0.5, { background: 'rgba(0, 0, 0, 0.6)' })
-      .to(this.boxLid, 1, { y: -100, scale: 4, ease: Power3.easeInOut }, '-=0.5')
-      .to(this.boxBody, 1, { y: 50, scale: 4, ease: Power3.easeInOut }, '-=1')
-      .to(this.boxLid, 1, { y: -800, ease: Power3.easeInOut }, '-=0.5')
+      .to(this.boxLid, 1, { x: 20, y: -100, scale: 4, ease: Power3.easeInOut }, '-=0.5')
+      .to(this.boxBody, 1, { x: 20, y: 50, scale: 4, ease: Power3.easeInOut }, '-=1')
+      .to(this.boxLid, 1, { y: -700, ease: Power3.easeInOut }, '-=0.5')
       .from(this.coupon, 0.4, { y: 200, opacity: 0, ease: Power3.easeInOut })
-      .to(this.coupon, 1.5, { scale: 1, ease: Bounce.easeOut })
+      .to(this.coupon, 1, { scale: 1, ease: Bounce.easeOut })
   }
   componentDidMount() {
     const root = ReactDOM.findDOMNode(this);

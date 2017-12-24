@@ -7,6 +7,7 @@ import Sounds from './Sounds';
 import Sound from './Sound';
 import { TimelineLite, Power3, Bounce } from "gsap";
 import Preload from './Preload';
+import Spinner from './Spinner';
 
 const TREE_MAX_AGE = 8;
 const SCENE_WIDTH = 1024;
@@ -15,7 +16,7 @@ const SCENE_HEIGHT = 768;
 const AppDiv = styled.div`
   width: 100vw;
   height: 100vh;
-  background: #e2f8f8;
+  background: #dddddd;
   display: flex;
   justify-content: center; 
   align-items: center;
@@ -394,7 +395,7 @@ class App extends Component {
     const scale = Math.min(1, viewportWidth / SCENE_WIDTH, viewportHeight / SCENE_HEIGHT);
     return (
       <AppDiv>
-        <Preload indicator={<div>Loading</div>}>
+        <Preload indicator={<div><Spinner/><span>Loading...</span></div>}>
           <Scene scale={scale} />
         </Preload>
       </AppDiv>

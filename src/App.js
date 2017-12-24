@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import Images from './Images';
 import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
 import Sounds from './Sounds';
 import Sound from './Sound';
-import { StaggeredMotion, spring } from 'react-motion';
+import { TimelineLite, Power3, Bounce } from "gsap";
 
 const TREE_MAX_AGE = 8;
 const SCENE_WIDTH = 1024;
@@ -108,17 +109,18 @@ const GiftImg = Img.extend`
 `
 
 const BoxLidImg = Img.extend`
-  left: 350px;
-  top: 450px;
-  transform: translate(${p => p.x}px, ${p => p.y}px) scale(${p => p.scale});
+  opacity: 0;
+  left: 425px;
+  top: 570px;
 `
 
 const BoxBodyImg = BoxLidImg.extend`
-  top: 470px;
+  left: 429px;
+  top: 610px;
 `
 
 const CouponDiv = styled.div`
-  background: rgba(0, 0, 0, ${props => props.bgOpacity * 0.6});
+  background: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,7 +128,7 @@ const CouponDiv = styled.div`
   height: 100%;
   position: absolute;
   div#coupon {
-    transform: scale(${p => p.scale});
+    transform: scale(0.6);
     background-image: url("${Images.couponBg}");
     background-repeat: no-repeat;
     padding: 20px;
@@ -240,12 +242,12 @@ const Water = props => (
 
 const SocialIcon = ({ name, link }) => (
   <a href={link}>
-    <i class={`fa fa-${name}`} aria-hidden="true"></i>
+    <i className={`fa fa-${name}`} aria-hidden="true"></i>
   </a>
 )
 
 const Coupon = (props) => (
-  <CouponDiv {...props}>
+  <CouponDiv id='coupon-container' {...props}>
     <div id="coupon">
       <div id="title-container">
         <h2>React 101 For Designers</h2>
@@ -274,18 +276,34 @@ const Coupon = (props) => (
 )
 
 class AnimatedCoupon extends Component {
+  animate = () => {
+    const animation = new TimelineLite();
+    animation
+      .delay(0.7)
+      .to(this.boxLid, 0.1, { opacity: 1 })
+      .to(this.boxBody, 0.1, { opacity: 1 })
+      .to(this.couponContainer, 0.5, { background: 'rgba(0, 0, 0, 0.6)' })
+      .to(this.boxLid, 1, { y: -100, scale: 4, ease: Power3.easeInOut }, '-=0.5')
+      .to(this.boxBody, 1, { y: 50, scale: 4, ease: Power3.easeInOut }, '-=1')
+      .to(this.boxLid, 1, { y: -800, ease: Power3.easeInOut }, '-=0.5')
+      .from(this.coupon, 0.4, { y: 200, opacity: 0, ease: Power3.easeInOut })
+      .to(this.coupon, 1.5, { scale: 1, ease: Bounce.easeOut })
+  }
+  componentDidMount() {
+    const root = ReactDOM.findDOMNode(this);
+    this.couponContainer = root.querySelector('#coupon-container');
+    this.coupon = root.querySelector('#coupon');
+    this.boxLid = root.querySelector('#box-lid');
+    this.boxBody = root.querySelector('#box-body');
+    this.animate();
+  }
   render() {
     return (
-      // <StaggeredMotion defaultStyles={[{ progress: 0 }]} style={{ progress: spring(1) }}>
-      //   {({ progress }) => (
-      //     <div>
-      //       <Coupon bgOpacity={progress} scale={progress}/>
-      //       <BoxLidImg src={Images.boxLid} />
-      //       <BoxBodyImg src={Images.boxBody} />
-      //     </div>
-      //   )}
-      // </StaggeredMotion>
-      <Coupon bgOpacity={1} scale={1}/>
+      <div>
+        <Coupon />
+        <BoxBodyImg id='box-body' src={Images.boxBody} />
+        <BoxLidImg id='box-lid' src={Images.boxLid} />
+      </div>
     );
   }
 }
@@ -294,7 +312,7 @@ const Gift = ({ onClick, isOpen }) => <GiftImg onClick={onClick} src={isOpen ? I
 
 class Scene extends Component {
   state = {
-    mouseX: 0, mouseY: 0, treeAge: TREE_MAX_AGE, giftOpen: false
+    mouseX: 0, mouseY: 0, treeAge: 0, giftOpen: false
   }
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()

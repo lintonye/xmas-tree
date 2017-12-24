@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="500px" height="300px" viewBox="0 0 500 300" enable-background="new 0 0 500 300" xml:space="preserve">
+<path fill="#FEFEFE" d="M0,0v300h500V0H0z M490,290H10V10h480V290z"/>
+<rect x="5.667" y="5.993" fill="#F7F7ED" width="488" height="288.34"/>
+<path fill="none" d="M0,0v300h500V0H0z M480,280H20V20h460V280z"/>
+<g>
+	<defs>
+		<path id="SVGID_1_" d="M0,0v300h500V0H0z M490,290H10V10h480V290z"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	<g clip-path="url(#SVGID_2_)">
+		<polygon fill="#F73131" points="-254.233,407.666 -281.566,407.666 10.234,-41.668 37.567,-41.668 		"/>
+		<polygon fill="#749B96" points="-204.233,407.666 -231.566,407.666 60.234,-41.668 87.567,-41.668 		"/>
+		<polygon fill="#F73131" points="-154.233,407.666 -181.566,407.666 110.234,-41.668 137.567,-41.668 		"/>
+		<polygon fill="#749B96" points="-104.233,407.666 -131.566,407.666 160.234,-41.668 187.566,-41.668 		"/>
+		<polygon fill="#F73131" points="-54.233,407.666 -81.566,407.666 210.234,-41.668 237.567,-41.668 		"/>
+		<polygon fill="#749B96" points="-4.233,407.666 -31.566,407.666 260.235,-41.668 287.567,-41.668 		"/>
+		<polygon fill="#F73131" points="45.767,407.666 18.434,407.666 310.235,-41.668 337.567,-41.668 		"/>
+		<polygon fill="#749B96" points="95.767,407.666 68.434,407.666 360.235,-41.668 387.567,-41.668 		"/>
+		<polygon fill="#F73131" points="145.767,407.666 118.434,407.666 410.235,-41.668 437.567,-41.668 		"/>
+		<polygon fill="#749B96" points="195.766,407.666 168.434,407.666 460.235,-41.668 487.567,-41.668 		"/>
+		<polygon fill="#F73131" points="245.767,407.666 218.435,407.666 510.235,-41.668 537.567,-41.668 		"/>
+		<polygon fill="#749B96" points="295.767,407.666 268.435,407.666 560.235,-41.668 587.567,-41.668 		"/>
+		<polygon fill="#F73131" points="345.767,407.666 318.435,407.666 610.235,-41.668 637.567,-41.668 		"/>
+		<polygon fill="#749B96" points="395.767,407.666 368.435,407.666 660.235,-41.668 687.567,-41.668 		"/>
+		<polygon fill="#F73131" points="445.767,407.666 418.435,407.666 710.235,-41.668 737.567,-41.668 		"/>
+		<polygon fill="#749B96" points="495.767,407.666 468.435,407.666 760.235,-41.668 787.567,-41.668 		"/>
+	</g>
+</g>
+</svg>

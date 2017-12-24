@@ -93,6 +93,11 @@ const GiftImg = Img.extend`
   pointer-events: auto;
 `
 
+const OpenGiftImg = Img.extend`
+  left: 230px;
+  top: 420px;
+`
+
 const BoxLidImg = Img.extend`
   opacity: 0;
   left: 425px;
@@ -353,6 +358,7 @@ class Scene extends Component {
           <Tree age={treeAge} />
           <Superman status={supermanStatus} />
           {showXmasTree && <Gift onClick={this._handleGiftClick} isOpen={this.state.giftOpen} />}
+          {showXmasTree && !this.state.giftOpen && <OpenGiftImg src={Images.open} />}
         </MidSceneDiv>
         {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
         {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
@@ -378,7 +384,7 @@ class App extends Component {
     const scale = Math.min(1, viewportWidth / SCENE_WIDTH, viewportHeight / SCENE_HEIGHT);
     return (
       <AppDiv>
-        <Preload indicator={<div><Spinner/><span>Loading...</span></div>}>
+        <Preload indicator={<div><Spinner /><span>Loading...</span></div>}>
           <Scene scale={scale} />
         </Preload>
       </AppDiv>

@@ -11,6 +11,7 @@ import giftUnwrapping from "./images/giftUnwrapping.gif";
 import couponBg from './images/coupon.svg';
 import boxLid from "./images/boxLid.svg";
 import boxBody from "./images/boxBody.svg";
+import open from "./images/open.png";
 
 const trees = Array(9).fill(0).reduce((result, _, idx) => {
   const key = `tree${idx}`;
@@ -32,5 +33,6 @@ export default {
   couponBg,
   boxLid,
   boxBody,
+  open,
   ...trees,
 }

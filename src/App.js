@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Sounds from './Sounds';
 import Sound from './Sound';
 import { TimelineLite, Power3, Bounce } from "gsap";
+import Preload from './Preload';
 
 const TREE_MAX_AGE = 8;
 const SCENE_WIDTH = 1024;
@@ -212,7 +213,7 @@ class Tree extends Component {
     this.setState({ growing });
   }
   render() {
-    const img = Images.tree(this.props.age);
+    const img = Images[`tree${this.props.age}`];
     return (
       <div>
         <TreeImg src={img} />
@@ -393,7 +394,9 @@ class App extends Component {
     const scale = Math.min(1, viewportWidth / SCENE_WIDTH, viewportHeight / SCENE_HEIGHT);
     return (
       <AppDiv>
-        <Scene scale={scale} />
+        <Preload indicator={<div>Loading</div>}>
+          <Scene scale={scale} />
+        </Preload>
       </AppDiv>
     );
   }

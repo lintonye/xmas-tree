@@ -6,6 +6,7 @@
   "dependencies": {
     "gh-pages": "^1.1.0",
     "gsap": "^1.20.3",
+    "preload-js": "^0.6.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.0.17",

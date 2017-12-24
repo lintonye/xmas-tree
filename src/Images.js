@@ -12,6 +12,12 @@ import couponBg from './images/coupon.svg';
 import boxLid from "./images/boxLid.svg";
 import boxBody from "./images/boxBody.svg";
 
+const trees = Array(9).fill(0).reduce((result, _, idx) => {
+  const key = `tree${idx}`;
+  result[key] = require(`./images/tree${idx}.gif`);
+  return result;
+}, {});
+
 export default {
   waterpot,
   background,
@@ -21,10 +27,10 @@ export default {
   supermanMagic,
   supermanCelebrate,
   water,
-  tree: age => require(`./images/tree${age}.gif`),
   gift,
   giftUnwrapping,
   couponBg,
   boxLid,
   boxBody,
+  ...trees,
 }

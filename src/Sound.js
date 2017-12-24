@@ -11,19 +11,30 @@ try {
 
 function load(url) {
   return new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.responseType = 'arraybuffer';
-    request.onload = () => {
+    const cachedBuffer = cache[url];
+    if (cachedBuffer) {
       audioContext.decodeAudioData(
-        request.response,
+        cachedBuffer.slice(0),
         (buffer) => {
           resolve(buffer);
         },
         () => { reject(`Load error: ${url}`); }
       )
-    };
-    request.send();
+    } else reject(`Not cached yet: ${url}`);
+
+    // const request = new XMLHttpRequest();
+    // request.open('GET', url, true);
+    // request.responseType = 'arraybuffer';
+    // request.onload = () => {
+    //   audioContext.decodeAudioData(
+    //     request.response,
+    //     (buffer) => {
+    //       resolve(buffer);
+    //     },
+    //     () => { reject(`Load error: ${url}`); }
+    //   )
+    // };
+    // request.send();
   });
 }
 
@@ -33,7 +44,6 @@ class Sound extends React.Component {
     var buffer = audioContext.createBuffer(1, 1, 22050);
     var source = audioContext.createBufferSource();
     source.buffer = buffer;
-    console.log('source', source);
     // connect to output (your speakers)
     source.connect(audioContext.destination);
     // play the file
@@ -81,3 +91,9 @@ class Sound extends React.Component {
 }
 
 export default Sound;
+
+let cache = {};
+
+export const saveSound = (url, buffer) => {
+  cache[url] = buffer;
+}

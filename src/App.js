@@ -4,8 +4,9 @@ import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
 import Sounds from './Sounds';
 import Sound from './Sound';
+import { StaggeredMotion, spring } from 'react-motion';
 
-const TREE_MAX_AGE = 9;
+const TREE_MAX_AGE = 8;
 const SCENE_WIDTH = 1024;
 const SCENE_HEIGHT = 768;
 
@@ -101,57 +102,23 @@ const GiftDiv = styled.div`
 
 const GiftImg = Img.extend`
   left: 350px;
-  top: 450px;
+  top: 490px;
   cursor: pointer;
   pointer-events: auto;
 `
 
-const Background = props => <BackgroundImg src={Images.background} {...props} />
+const BoxLidImg = Img.extend`
+  left: 350px;
+  top: 450px;
+  transform: translate(${p => p.x}px, ${p => p.y}px) scale(${p => p.scale});
+`
 
-const Foreground = props => <ForegroundImg src={Images.foreground} {...props} />
-
-const Waterpot = (props) => {
-  const img = Images.waterpot;
-  return <WaterpotImg src={img} {...props} />;
-};
-
-class Tree extends Component {
-  state = { growing: false }
-  componentWillReceiveProps(nextProps) {
-    const growing = this.props.age < nextProps.age;
-    this.setState({ growing });
-  }
-  render() {
-    const img = Images.tree(this.props.age);
-    return (
-      <div>
-        <TreeImg src={img} />
-        {this.state.growing && <Sound url={Sounds.magicGrowth} loop={false} />}
-      </div>
-    );
-  }
-}
-
-const Superman = ({ status }) => {
-  let img = Images.supermanBored;
-  switch (status) {
-    case 'bored': img = Images.supermanBored; break;
-    case 'magic': img = Images.supermanMagic; break;
-    case 'celebrate': img = Images.supermanCelebrate; break;
-    default: img = Images.supermanBored;
-  }
-  return <SupermanImg src={img} />;
-}
-
-const Water = props => (
-  <div>
-    <WaterImg src={Images.water} {...props} />
-    <Sound url={Sounds.flowerWatering} loop={true} />
-  </div>
-)
+const BoxBodyImg = BoxLidImg.extend`
+  top: 470px;
+`
 
 const CouponDiv = styled.div`
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, ${props => props.bgOpacity * 0.6});
   display: flex;
   justify-content: center;
   align-items: center;
@@ -159,6 +126,7 @@ const CouponDiv = styled.div`
   height: 100%;
   position: absolute;
   div#coupon {
+    transform: scale(${p => p.scale});
     background-image: url("${Images.couponBg}");
     background-repeat: no-repeat;
     padding: 20px;
@@ -226,14 +194,58 @@ const CouponDiv = styled.div`
   }
 `;
 
+const Background = props => <BackgroundImg src={Images.background} {...props} />
+
+const Foreground = props => <ForegroundImg src={Images.foreground} {...props} />
+
+const Waterpot = (props) => {
+  const img = Images.waterpot;
+  return <WaterpotImg src={img} {...props} />;
+};
+
+class Tree extends Component {
+  state = { growing: false }
+  componentWillReceiveProps(nextProps) {
+    const growing = this.props.age < nextProps.age;
+    this.setState({ growing });
+  }
+  render() {
+    const img = Images.tree(this.props.age);
+    return (
+      <div>
+        <TreeImg src={img} />
+        {this.state.growing && <Sound url={Sounds.magicGrowth} loop={false} />}
+      </div>
+    );
+  }
+}
+
+const Superman = ({ status }) => {
+  let img = Images.supermanBored;
+  switch (status) {
+    case 'bored': img = Images.supermanBored; break;
+    case 'magic': img = Images.supermanMagic; break;
+    case 'celebrate': img = Images.supermanCelebrate; break;
+    default: img = Images.supermanBored;
+  }
+  return <SupermanImg src={img} />;
+}
+
+const Water = props => (
+  <div>
+    <WaterImg src={Images.water} {...props} />
+    <Sound url={Sounds.flowerWatering} loop={true} />
+  </div>
+)
+
 const SocialIcon = ({ name, link }) => (
   <a href={link}>
     <i class={`fa fa-${name}`} aria-hidden="true"></i>
   </a>
 )
 
-const Coupon = () => (
-  <CouponDiv>
+const Coupon = (props) => (
+  <CouponDiv {...props}>
     <div id="coupon">
       <div id="title-container">
         <h2>React 101 For Designers</h2>
@@ -261,20 +273,28 @@ const Coupon = () => (
   </CouponDiv>
 )
 
-class Gift extends Component {
-  state = { opened: false }
-  _onClick = () => this.setState(prevState => ({ opened: !prevState.opened }));
+class AnimatedCoupon extends Component {
   render() {
-    const img = this.state.opened ? Images.giftUnwrapping : Images.gift;
     return (
-      <GiftImg onClick={this._onClick} src={img} />
+      // <StaggeredMotion defaultStyles={[{ progress: 0 }]} style={{ progress: spring(1) }}>
+      //   {({ progress }) => (
+      //     <div>
+      //       <Coupon bgOpacity={progress} scale={progress}/>
+      //       <BoxLidImg src={Images.boxLid} />
+      //       <BoxBodyImg src={Images.boxBody} />
+      //     </div>
+      //   )}
+      // </StaggeredMotion>
+      <Coupon bgOpacity={1} scale={1}/>
     );
   }
 }
 
+const Gift = ({ onClick, isOpen }) => <GiftImg onClick={onClick} src={isOpen ? Images.giftUnwrapping : Images.gift} />
+
 class Scene extends Component {
   state = {
-    mouseX: 0, mouseY: 0, treeAge: TREE_MAX_AGE,
+    mouseX: 0, mouseY: 0, treeAge: TREE_MAX_AGE, giftOpen: false
   }
   _updateXY = (e) => {
     const bounds = e.target.getBoundingClientRect()
@@ -316,6 +336,7 @@ class Scene extends Component {
       near: p * 4,
     }
   }
+  _handleGiftClick = () => this.setState({ giftOpen: true });
   render() {
     const { treeAge } = this.state;
     const showXmasTree = treeAge === TREE_MAX_AGE;
@@ -328,13 +349,13 @@ class Scene extends Component {
           <MidgroundImg src={Images.midground} />
           <Tree age={treeAge} />
           <Superman status={supermanStatus} />
-          {showXmasTree && <Gift />}
+          {showXmasTree && <Gift onClick={this._handleGiftClick} isOpen={this.state.giftOpen} />}
         </MidSceneDiv>
         {this._shouldWaterComeOut() && !showXmasTree && <Water x={this.state.mouseX} y={this.state.mouseY} />}
         {!showXmasTree && <Waterpot x={this.state.mouseX} y={this.state.mouseY} rotate={this._shouldWaterComeOut()} />}
         <Foreground offsetX={parallax.near} />
         <Sound url={showXmasTree ? Sounds.xmas : Sounds.background} loop={true} />
-        <Coupon />
+        {this.state.giftOpen && <AnimatedCoupon />}
       </SceneDiv>
     );
   }

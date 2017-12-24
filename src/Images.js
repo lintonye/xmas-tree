@@ -9,6 +9,8 @@ import water from './images/water.gif';
 import gift from "./images/gift.gif";
 import giftUnwrapping from "./images/giftUnwrapping.gif";
 import couponBg from './images/coupon.svg';
+import boxLid from "./images/boxLid.svg";
+import boxBody from "./images/boxBody.svg";
 
 export default {
   waterpot,
@@ -23,4 +25,6 @@ export default {
   gift,
   giftUnwrapping,
   couponBg,
+  boxLid,
+  boxBody,
 }

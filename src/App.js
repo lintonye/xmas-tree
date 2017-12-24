@@ -60,23 +60,6 @@ const TreeImg = Img.extend`
   left: 300px;
   top: 150px;
 `
-const wanderSlowly = keyframes`
-  0% {
-    transform: translateX(0px);
-  }
-  25% {
-    transform: translateX(-10px);
-  }
-  50% {
-    transform: translateX(0px);
-  }
-  75% {
-    transform: translateX(10px);
-  }
-  100% {
-    transform: translateX(0px);
-  }
-`;
 
 const BackgroundImg = Img.extend`
   left: -40px;

@@ -127,65 +127,35 @@ const CouponDiv = styled.div`
     background-image: url("${Images.couponBg}");
     background-repeat: no-repeat;
     padding: 20px;
-    width: 460px;
-    height: 260px;
+    width: 638px;
+    height: 389px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #283593;
-    #title-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      line-height: 0.4em;
-      h2 {
-        margin-top: 30px;
-      }
-      span {
-        font-size: 1.2em;
-      }
-    }
-    #discount {
-      text-align: center;
-      font-size: 3em;
-      color: red;
-    }
-    #code-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: right;
-      #labels {
-        margin-right: 10px;
-        h1 {
-          line-height: 0;
-          font-size: 2em;
-          font-weight: 100;
-        }
-        span {
-          line-height: 0;
-          color: #a0a0a0;
-        }
-      }
-      #code {
-        border-style: dotted;
-        border-width: 2px;
-        border-radius: 8px;
-        padding: 5px;
-        line-height: 0;
-      }
-    }
+    color: #283593;   
     #links {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       a {
-        margin: 10px;
-        color: #0097A7;
+        color: transparent !important;
+        position: absolute;
+        /* background: rgba(0, 0, 0, 0.5); */
       }
-      i {
-        font-size: 1.5em;
+      #website {
+        right: 70px;
+        bottom: 60px;
+        width: 200px;
+        height: 40px;
+      }
+      #twitter {
+        left: 30px;
+        bottom: 60px;
+        width: 30px;
+        height: 30px;
+      }
+      #facebook {
+        left: 80px;
+        bottom: 60px;
+        width: 30px;
+        height: 30px;
       }
     }
   }
@@ -255,7 +225,7 @@ const SocialIcon = ({ name, link }) => (
 const Coupon = props => (
   <CouponDiv id="coupon-container" {...props}>
     <div id="coupon">
-      <div id="title-container">
+      {/* <div id="title-container">
         <h2>React 101 For Designers</h2>
         <span>Enroll January 2018!</span>
       </div>
@@ -268,23 +238,23 @@ const Coupon = props => (
         <div id="code">
           <h2>R4D2018</h2>
         </div>
-      </div>
+      </div> */}
       <div id="links">
-        <a href="http://learnreact.design">learnreact.design</a>
-        <div>
-          <SocialIcon
-            name="twitter"
-            link="https://twitter.com/home?status=Happy%20holidays!%20Let's%20grow%20a%20Xmas%20tree%3A%20https%3A//lintonye.github.io/xmas-tree/%20"
-          />
-          <SocialIcon
-            name="facebook"
-            link="https://www.facebook.com/sharer/sharer.php?u=https%3A//lintonye.github.io/xmas-tree/"
-          />
-          <SocialIcon
-            name="google-plus"
-            link="https://plus.google.com/share?url=https%3A//lintonye.github.io/xmas-tree/"
-          />
-        </div>
+        <a href="http://learnreact.design" id="website">
+          learnreact.design
+        </a>
+        <a
+          id="twitter"
+          href="https://twitter.com/home?status=Happy%20holidays!%20Let's%20grow%20a%20Xmas%20tree%3A%20https%3A//lintonye.github.io/xmas-tree/%20"
+        />
+        <a
+          id="facebook"
+          href="https://www.facebook.com/sharer/sharer.php?u=https%3A//lintonye.github.io/xmas-tree/"
+        />
+        <a
+          name="google-plus"
+          link="https://plus.google.com/share?url=https%3A//lintonye.github.io/xmas-tree/"
+        />
       </div>
     </div>
   </CouponDiv>
